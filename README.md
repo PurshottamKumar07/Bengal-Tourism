@@ -1,4 +1,4 @@
-# West Bengal Tourism
+# Bengal Tourism
 
 ## Overview
 This Django project provides a comprehensive platform for exploring the beautiful destinations of West Bengal. It includes features for user authentication, destination listings, and various travel-related services.
