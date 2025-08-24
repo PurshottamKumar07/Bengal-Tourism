@@ -27,7 +27,7 @@ This Django project provides a comprehensive platform for exploring the beautifu
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/PurshottamKumar07/Bengal-Tourism.git
    cd tourism
    ```
 2. Create a virtual environment:
