@@ -3,6 +3,18 @@
 ## Overview
 This Django project provides a comprehensive platform for exploring the beautiful destinations of West Bengal. It includes features for user authentication, destination listings, and various travel-related services.
 
+## Screenshots
+# Home Page
+![Home Page](https://raw.githubusercontent.com/PurshottamKumar07/Bengal-Tourism/refs/heads/main/home.png)
+
+# About Page
+![About Page](https://raw.githubusercontent.com/PurshottamKumar07/Bengal-Tourism/refs/heads/main/about.png)
+![About page 2](https://raw.githubusercontent.com/PurshottamKumar07/Bengal-Tourism/refs/heads/main/screenshot.png)
+
+# Login Page
+![Login Page](https://raw.githubusercontent.com/PurshottamKumar07/Bengal-Tourism/refs/heads/main/login.png)
+
+
 ## Features
 - **User Authentication**: Sign up, login, and logout functionalities.
 - **Destination Listings**: Explore various destinations categorized by type (beach, mountain, historical, etc.).
