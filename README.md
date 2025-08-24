@@ -1,91 +1,74 @@
 # West Bengal Tourism
 
 ## Overview
-This Django project includes a complete authentication system with user registration, login, and logout functionality.
+This Django project provides a comprehensive platform for exploring the beautiful destinations of West Bengal. It includes features for user authentication, destination listings, and various travel-related services.
 
 ## Features
+- **User Authentication**: Sign up, login, and logout functionalities.
+- **Destination Listings**: Explore various destinations categorized by type (beach, mountain, historical, etc.).
+- **Detailed Views**: Get detailed information about each destination, including images and descriptions.
+- **Search Functionality**: Search for destinations based on user preferences.
+- **Caravan Rentals**: Browse and book caravans for travel.
+- **Courses**: Enroll in various courses related to tourism and hospitality.
+- **Contact and Support**: Reach out for inquiries and support.
 
-### User Registration (Sign Up)
-- Username, email, and full name required
-- Age field (optional)
-- Password confirmation
-- Automatic login after successful registration
-- Email uniqueness validation
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd tourism
+   ```
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. Install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### User Login
-- Username and password authentication
-- Remember next URL parameter for redirects
-- User-friendly error messages
-- Automatic redirect if already logged in
+## Running the Project
+1. Apply migrations:
+   ```bash
+   python manage.py migrate
+   ```
+2. Create a superuser (optional):
+   ```bash
+   python manage.py createsuperuser
+   ```
+3. Run the development server:
+   ```bash
+   python manage.py runserver
+   ```
+4. Access the application at `http://127.0.0.1:8000/`.
 
-### User Logout
-- Secure logout functionality
-- Success message confirmation
-- Redirect to home page
-
-## Technical Details
-
-### URLs
-- **Sign Up**: `/accounts/signup/`
-- **Login**: `/accounts/login/`
-- **Logout**: `/accounts/logout/`
-
-### Views
-- `signup_view`: Handles user registration
-- `login_view`: Handles user authentication
-- `logout_view`: Handles user logout (requires login)
-
-### Forms
-- `SignUpForm`: Extends Django's UserCreationForm
-- `LoginForm`: Simple username/password form
-
-### Models
-- `UserProfile`: Extended user profile with age field
-- Automatically created when user registers
-
-## Settings Configuration
-The following authentication settings are configured in `tourism/settings.py`:
-
-```python
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/login/'
+## Directory Structure
 ```
-
-## Styling
-Custom CSS has been added to `static/css/style.css` for:
-- Form styling and animations
-- Alert message styling
-- Responsive design
-- Modern UI elements
+tourism/
+│
+├── accounts/               # User authentication
+├── agency/                 # Agency-related functionalities
+├── core/                   # Core application logic
+├── media/                  # Uploaded media files
+├── static/                 # Static files (CSS, JS, images)
+├── templates/              # HTML templates
+└── manage.py               # Django management script
+```
 
 ## Testing
-Run the authentication tests with:
+Run the tests for the application:
 ```bash
-python manage.py test accounts
+python manage.py test
 ```
 
-## Usage Examples
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request.
 
-### Creating a Test User
-```bash
-python manage.py createsuperuser --username testuser --email test@example.com --noinput
-python manage.py shell -c "from django.contrib.auth.models import User; u = User.objects.get(username='testuser'); u.set_password('testpass123'); u.save()"
-```
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Running the Development Server
-```bash
-python manage.py runserver
-```
-
-## Security Features
-- CSRF protection enabled
-- Password validation using Django's built-in validators
-- Session-based authentication
-- Secure password hashing
-- Form validation and sanitization
-
-## Browser Support
-- Modern browsers with CSS3 and JavaScript support
-- Responsive design for mobile and desktop
-- Bootstrap 4.5.0 framework
+## Acknowledgments
+- Django framework for web development.
+- Bootstrap for responsive design.
+- Various contributors and resources that helped in the development of this project.
