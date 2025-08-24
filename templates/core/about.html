@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  About Us | West Bengal Tourism
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    /* Feedback form styling */
+    .feedback-form .card {
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    
+    .feedback-form .card-header {
+      border-radius: 10px 10px 0 0 !important;
+      border: none;
+    }
+    
+    .feedback-form .form-control {
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+    
+    .feedback-form .form-control:focus {
+      border-color: #f96d00;
+      box-shadow: 0 0 0 0.2rem rgba(249, 109, 0, 0.25);
+    }
+    
+    .feedback-form .btn-primary {
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-weight: 600;
+    }
+    
+    /* Star rating styling */
+    .star .fa-star {
+      color: #f96d00 !important;
+    }
+    
+    .star .fa-star-o {
+      color: #ccc !important;
+    }
+    
+    /* Testimonial card improvements */
+    .testimony-wrap {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      padding: 20px;
+    }
+  </style>
+{% endblock %}
+
+{% block hero_section %}
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/west_bengal/kolkata1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs">
+            <span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span> <span>About us <i class="fa fa-chevron-right"></i></span>
+          </p>
+          <h1 class="mb-0 bread">About Us</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <section class="ftco-section services-section">
+    <div class="container">
+      <div class="row d-flex">
+        <div class="col-md-6 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
+          <div class="w-100">
+            <span class="subheading">Welcome to West Bengal</span>
+            <h2 class="mb-4">It's time to start your adventure</h2>
+            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
+            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+            <p>
+              <a href="#" class="btn btn-primary py-3 px-4">Search Destination</a>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+              <div class="services services-1 color-1 d-block img" style="background-image: url('{% static 'images/services-1.jpg' %}');">
+                <div class="icon d-flex align-items-center justify-content-center">
+                  <span class="flaticon-paragliding"></span>
+                </div>
+                <div class="media-body">
+                  <h3 class="heading mb-3">Activities</h3>
+                  <p>A small river named Duden flows by their place and supplies it with the necessary</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+              <div class="services services-1 color-2 d-block img" style="background-image: url('{% static 'images/services-2.jpg' %}');">
+                <div class="icon d-flex align-items-center justify-content-center">
+                  <span class="flaticon-route"></span>
+                </div>
+                <div class="media-body">
+                  <h3 class="heading mb-3">Travel Arrangements</h3>
+                  <p>A small river named Duden flows by their place and supplies it with the necessary</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+              <div class="services services-1 color-3 d-block img" style="background-image: url('{% static 'images/services-3.jpg' %}');">
+                <div class="icon d-flex align-items-center justify-content-center">
+                  <span class="flaticon-tour-guide"></span>
+                </div>
+                <div class="media-body">
+                  <h3 class="heading mb-3">Private Guide</h3>
+                  <p>A small river named Duden flows by their place and supplies it with the necessary</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+              <div class="services services-1 color-4 d-block img" style="background-image: url('{% static 'images/services-4.jpg' %}');">
+                <div class="icon d-flex align-items-center justify-content-center">
+                  <span class="flaticon-map"></span>
+                </div>
+                <div class="media-body">
+                  <h3 class="heading mb-3">Location Manager</h3>
+                  <p>A small river named Duden flows by their place and supplies it with the necessary</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section ftco-about img" style="background-image: url('{% static 'images/west_bengal/wide.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container py-md-5">
+      <div class="row py-md-5">
+        <div class="col-md d-flex align-items-center justify-content-center">
+          <a href="https://www.youtube.com/watch?v=Caza7QwEosc" class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4"><span class="fa fa-play"></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section ftco-about ftco-no-pt img">
+    <div class="container">
+      <div class="row d-flex">
+        <div class="col-md-12 about-intro">
+          <div class="row">
+            <div class="col-md-6 d-flex align-items-stretch">
+              <div class="img d-flex w-100 align-items-center justify-content-center" style="background-image: url('{% static 'images/about-1.jpg' %}');"></div>
+            </div>
+            <div class="col-md-6 pl-md-5 py-5">
+              <div class="row justify-content-start pb-3">
+                <div class="col-md-12 heading-section ftco-animate">
+                  <span class="subheading">About Us</span>
+                  <h2 class="mb-4">Make Your Tour Memorable and Safe With Us</h2>
+                  <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
+                  <p>
+                    <a href="#" class="btn btn-primary">Book Your Destination</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section testimony-section bg-bottom" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+      <!-- Section Heading -->
+      <div class="row justify-content-center pb-4">
+        <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+          <span class="subheading">Testimonial</span>
+          <h2 class="mb-4">Tourist Feedback</h2>
+          <p class="text-white">Hear what our visitors have to say about their experiences in West Bengal</p>
+        </div>
+      </div>
+
+      <!-- Feedback Submission Form for Authenticated Users -->
+      {% if user_authenticated %}
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-8">
+            <div class="card feedback-form">
+              <div class="card-header text-center" style="background: #f96d00; color: white;">
+                <h4 class="mb-0">Share Your Experience</h4>
+              </div>
+              <div class="card-body">
+                {% if form_success %}
+                  <div class="alert alert-success">
+                    <i class="fa fa-check-circle"></i>
+                    Thank you for your feedback! Your testimonial has been submitted successfully.
+                  </div>
+                {% endif %}
+
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="{{ form.rating.id_for_label }}">Rating *</label>
+                    {{ form.rating }}
+                    {% if form.rating.errors %}
+                      <div class="text-danger">{{ form.rating.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="{{ form.feedback.id_for_label }}">Your Feedback *</label>
+                    {{ form.feedback }}
+                    {% if form.feedback.errors %}
+                      <div class="text-danger">{{ form.feedback.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block" style="background: #f96d00; border-color: #f96d00;">Submit Feedback</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="row justify-content-center mb-5">
+          <div class="col-md-8 text-center">
+            <div class="alert alert-info">
+              <i class="fa fa-info-circle"></i>
+              <strong>Want to share your experience?</strong>
+              <a href="{% url 'accounts:login' %}" class="alert-link">Sign in</a> to submit your feedback about West Bengal Tourism!
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      <!-- Testimonials Carousel -->
+      <div class="row ftco-animate">
+        <div class="col-md-12">
+          <div class="carousel-testimony owl-carousel">
+            {% for t in testimonials %}
+              <div class="item">
+                <div class="testimony-wrap py-4">
+                  <div class="text">
+                    <p class="star">
+                      {% for i in "12345" %}
+                        {% if forloop.counter <= t.rating %}
+                          <span class="fa fa-star" style="color: #f96d00;"></span>
+                        {% else %}
+                          <span class="fa fa-star-o" style="color: #ccc;"></span>
+                        {% endif %}
+                      {% endfor %}
+                    </p>
+                    <p class="mb-4">{{ t.feedback }}</p>
+                    <div class="d-flex align-items-center">
+                      <div class="user-img"
+                        style="background-image: url({% if t.image %}
+                          {{ t.image.url }}
+                        {% else %}
+                          {% static 'images/default.jpg' %}
+                        {% endif %})"></div>
+                      <div class="pl-3">
+                        <p class="name">{{ t.name }}</p>
+                        <span class="position">{{ t.position }}</span>
+                        {% if t.destination %}
+                          <small class="text-muted d-block">Visited: {{ t.destination.name }}</small>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-intro ftco-section ftco-no-pt">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-12 text-center">
+          <div class="img" style="background-image: url('{% static 'images/bg_2.jpg' %}');">
+            <div class="overlay"></div>
+            <h2>We Are West Bengal A Travel Agency</h2>
+            <p>We can manage your dream building A small river named Duden flows by their place</p>
+            <p class="mb-0">
+              <a href="#" class="btn btn-primary px-4 py-3">Ask For A Quote</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/google-map.js' %}"></script>
+{% endblock %}

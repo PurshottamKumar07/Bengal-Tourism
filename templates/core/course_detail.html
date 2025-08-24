@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ course.name }} | West Bengal Tourism
+{% endblock %}
+
+{% block hero_section %}
+  <section class="hero-wrap hero-wrap-2 js-fullheight"
+    style="background-image: url('{% if course.featured_image %}
+      {{ course.featured_image.url }}
+    {% else %}
+      {% static 'images/west_bengal/kolkata1.jpg' %}
+    {% endif %}');">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs">
+            <span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span>
+            <span class="mr-2"><a href="{% url 'courses' %}">Courses <i class="fa fa-chevron-right"></i></a></span>
+            <span>{{ course.name }}</span>
+          </p>
+          <h1 class="mb-0 bread">{{ course.name }}</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row">
+        <!-- Course Details -->
+        <div class="col-lg-8">
+          <div class="course-details">
+            <!-- Course Header -->
+            <div class="course-header mb-4">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h2>{{ course.name }}</h2>
+                <div class="course-price">
+                  <span class="price-tag-large">₹{{ course.price|floatformat:0 }}</span>
+                </div>
+              </div>
+              <div class="course-meta">
+                <span class="badge badge-primary mr-2">{{ course.get_category_display }}</span>
+                <span class="badge badge-info mr-2">{{ course.duration_text }}</span>
+                <span class="badge badge-secondary">Max {{ course.max_students }} students</span>
+              </div>
+            </div>
+
+            <!-- Course Description -->
+            <div class="course-description mb-4">
+              <h4>Course Overview</h4>
+              <p>{{ course.description }}</p>
+            </div>
+
+            <!-- Course Syllabus -->
+            {% if course.syllabus %}
+              <div class="course-syllabus mb-4">
+                <h4>What You'll Learn</h4>
+                <div class="syllabus-content">{{ course.syllabus|linebreaks }}</div>
+              </div>
+            {% endif %}
+
+            <!-- Course Requirements -->
+            {% if course.requirements %}
+              <div class="course-requirements mb-4">
+                <h4>Prerequisites & Requirements</h4>
+                <div class="requirements-content">{{ course.requirements|linebreaks }}</div>
+              </div>
+            {% endif %}
+
+            <!-- Course Benefits -->
+            {% if course.benefits %}
+              <div class="course-benefits mb-4">
+                <h4>What You'll Gain</h4>
+                <div class="benefits-content">{{ course.benefits|linebreaks }}</div>
+              </div>
+            {% endif %}
+
+            <!-- Start Date -->
+            {% if course.start_date %}
+              <div class="course-start-date mb-4">
+                <h4>Next Start Date</h4>
+                <p class="start-date">{{ course.start_date|date:'F j, Y' }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Course Application Sidebar -->
+        <div class="col-lg-4">
+          <div class="course-application-sidebar">
+            <div class="card">
+              <div class="card-header">
+                <h5>Apply for This Course</h5>
+              </div>
+              <div class="card-body">
+                {% if form_success %}
+                  <div class="alert alert-success">
+                    <i class="fa fa-check-circle"></i>
+                    Your application has been submitted successfully! We'll contact you soon.
+                  </div>
+                {% endif %}
+
+                <form method="post" class="course-application-form">
+                  {% csrf_token %}
+
+                  <div class="form-group">
+                    <label for="{{ application_form.full_name.id_for_label }}">Full Name *</label>
+                    {{ application_form.full_name }}
+                    {% if application_form.full_name.errors %}
+                      <div class="text-danger">{{ application_form.full_name.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="{{ application_form.email.id_for_label }}">Email *</label>
+                    {{ application_form.email }}
+                    {% if application_form.email.errors %}
+                      <div class="text-danger">{{ application_form.email.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="{{ application_form.phone.id_for_label }}">Phone</label>
+                    {{ application_form.phone }}
+                    {% if application_form.phone.errors %}
+                      <div class="text-danger">{{ application_form.phone.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <div class="form-group">
+                    <label for="{{ application_form.message.id_for_label }}">Message</label>
+                    {{ application_form.message }}
+                    {% if application_form.message.errors %}
+                      <div class="text-danger">{{ application_form.message.errors }}</div>
+                    {% endif %}
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-block">Apply Now</button>
+                </form>
+
+                <div class="course-info mt-3">
+                  <div class="info-item">
+                    <i class="fa fa-clock-o"></i>
+                    <span>Duration: {{ course.duration_text }}</span>
+                  </div>
+                  <div class="info-item">
+                    <i class="fa fa-users"></i>
+                    <span>Max Students: {{ course.max_students }}</span>
+                  </div>
+                  <div class="info-item">
+                    <i class="fa fa-calendar"></i>
+                    <span>Category: {{ course.get_category_display }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Courses -->
+      {% if related_courses %}
+        <section class="ftco-section bg-light mt-5">
+          <div class="container">
+            <div class="row justify-content-center pb-4">
+              <div class="col-md-12 heading-section text-center ftco-animate">
+                <h2 class="mb-4">Related Courses</h2>
+              </div>
+            </div>
+            <div class="row">
+              {% for related_course in related_courses %}
+                <div class="col-md-4 d-flex ftco-animate">
+                  <div class="blog-entry justify-content-end">
+                    <a href="{% url 'course_detail' related_course.slug %}"
+                      class="block-20"
+                      style="background-image: url('{% if related_course.featured_image %}
+                        {{ related_course.featured_image.url }}
+                      {% else %}
+                        {% static 'images/image_1.jpg' %}
+                      {% endif %}');">
+
+                    </a>
+                    <div class="text">
+                      <div class="d-flex align-items-center mb-4 topp">
+                        <div class="one">
+                          <span class="day">{{ related_course.duration_weeks }}</span>
+                        </div>
+                        <div class="two">
+                          <span class="yr">Weeks</span><span class="mos">{{ related_course.get_category_display }}</span>
+                        </div>
+                      </div>
+                      <h3 class="heading"><a href="{% url 'course_detail' related_course.slug %}">{{ related_course.name }}</a></h3>
+                      <p class="excerpt">{{ related_course.short_description|default:related_course.description|truncatewords:15 }}</p>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-tag">₹{{ related_course.price|floatformat:0 }}</span>
+                        <a href="{% url 'course_detail' related_course.slug %}" class="btn btn-primary">Learn More</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Destination | West Bengal Tourism{% endblock %}
+
+{% block hero_section %}
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static "images/west_bengal/howrah.jpg" %}');">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+         <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span> <span>Tour List <i class="fa fa-chevron-right"></i></span></p>
+         <h1 class="mb-0 bread">{{ page_title|default:"Tours List" }}</h1>
+     </div>
+ </div>
+</div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="ftco-section ftco-no-pb">
+   <div class="container">
+      <div class="row">
+       <div class="col-md-12">
+          <div class="search-wrap-1 ftco-animate">
+             <form action="{% url 'destination' %}" method="get" class="search-property-1">
+                <div class="row no-gutters">
+                   <div class="col-lg d-flex">
+                      <div class="form-group p-4 border-0">
+                         <label for="destination">Destination</label>
+                         <div class="form-field">
+                           <div class="icon"><span class="fa fa-search"></span></div>
+                           <input type="text" name="destination" class="form-control" placeholder="Search place" value="{{ search_query.destination|default:'' }}">
+                       </div>
+                   </div>
+               </div>
+               <div class="col-lg d-flex">
+                  <div class="form-group p-4">
+                     <label for="checkin">Check-in date</label>
+                     <div class="form-field">
+                       <div class="icon"><span class="fa fa-calendar"></span></div>
+                       <input type="text" name="checkin" class="form-control checkin_date" placeholder="Check In Date" value="{{ search_query.checkin|default:'' }}">
+                   </div>
+               </div>
+           </div>
+           <div class="col-lg d-flex">
+              <div class="form-group p-4">
+                 <label for="checkout">Check-out date</label>
+                 <div class="form-field">
+                   <div class="icon"><span class="fa fa-calendar"></span></div>
+                   <input type="text" name="checkout" class="form-control checkout_date" placeholder="Check Out Date" value="{{ search_query.checkout|default:'' }}">
+               </div>
+           </div>
+       </div>
+       <div class="col-lg d-flex">
+          <div class="form-group p-4">
+             <label for="price_limit">Price Limit</label>
+             <div class="form-field">
+               <div class="select-wrap">
+                <div class="icon"><span class="fa fa-chevron-down"></span></div>
+                <select name="price_limit" id="price_limit" class="form-control">
+                  <option value="">Select Price Limit</option>
+                  <option value="5000"{% if search_query.price_limit == "5000" %} selected="selected"{% endif %}>₹5,000</option>
+                  <option value="10000"{% if search_query.price_limit == "10000" %} selected="selected"{% endif %}>₹10,000</option>
+                  <option value="50000"{% if search_query.price_limit == "50000" %} selected="selected"{% endif %}>₹50,000</option>
+                  <option value="100000"{% if search_query.price_limit == "100000" %} selected="selected"{% endif %}>₹100,000</option>
+                  <option value="200000"{% if search_query.price_limit == "200000" %} selected="selected"{% endif %}>₹200,000</option>
+                  <option value="300000"{% if search_query.price_limit == "300000" %} selected="selected"{% endif %}>₹300,000</option>
+                  <option value="400000"{% if search_query.price_limit == "400000" %} selected="selected"{% endif %}>₹400,000</option>
+                  <option value="500000"{% if search_query.price_limit == "500000" %} selected="selected"{% endif %}>₹500,000</option>
+              </select>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="col-lg d-flex">
+  <div class="form-group d-flex w-100 border-0">
+     <div class="form-field w-100 align-items-center d-flex">
+        <input type="submit" value="Search" class="align-self-stretch form-control btn btn-primary">
+        {% if search_query %}
+        <a href="{% url 'destination' %}" class="btn btn-secondary ml-2">Clear Filters</a>
+        {% endif %}
+    </div>
+</div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="ftco-section">
+   <div class="container">
+    <div class="row">
+      {% if destinations %}
+        {% for destination in destinations %}
+        <div class="col-md-4 ftco-animate">
+          <div class="project-wrap">
+             <a href="{% url 'destination_detail' destination.slug %}" class="img" style="background-image: url('{{ destination.image.url }}');">
+                <span class="price">₹{{ destination.price_per_person }}/person</span>
+            </a>
+            <div class="text p-4">
+                <span class="days">{{ destination.duration }} Days Tour</span>
+                <h3><a href="{% url 'destination_detail' destination.slug %}">{{ destination.name }}</a></h3>
+                <p class="location"><span class="fa fa-map-marker"></span> {{ destination.location }}</p>
+                <ul>
+                   <li><span class="flaticon-shower"></span>{{ destination.shower_count }}</li>
+                   <li><span class="flaticon-king-size"></span>{{ destination.bed_count }}</li>
+                   <li>
+                     <span class="
+                       {% if destination.near_mountain %}flaticon-mountains
+                       {% elif destination.near_beach %}flaticon-sun-umbrella
+                       {% else %}flaticon-city{% endif %}">
+                     </span>
+                     {% if destination.near_mountain %}Near Mountain
+                     {% elif destination.near_beach %}Near Beach
+                     {% else %}City Center{% endif %}
+                   </li>
+               </ul>
+           </div>
+       </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12 text-center">
+          <p class="lead">No destinations found matching your criteria.</p>
+          <a href="{% url 'destination' %}" class="btn btn-primary">View All Destinations</a>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if destinations.has_other_pages %}
+    <div class="row mt-5">
+      <div class="col text-center">
+        <div class="block-27">
+          <ul>
+            {% if destinations.has_previous %}
+            <li><a href="?page={{ destinations.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&lt;</a></li>
+            {% endif %}
+
+            {% for i in destinations.paginator.page_range %}
+              {% if destinations.number == i %}
+              <li class="active"><span>{{ i }}</span></li>
+              {% else %}
+              <li><a href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if destinations.has_next %}
+            <li><a href="?page={{ destinations.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&gt;</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% if featured_destinations %}
+<section class="ftco-section ftco-no-pt">
+  <div class="container">
+    <div class="row justify-content-center pb-4">
+      <div class="col-md-12 heading-section text-center ftco-animate">
+        <span class="subheading">Special Offers</span>
+        <h2 class="mb-4">Featured Destinations</h2>
+      </div>
+    </div>
+    <div class="row">
+      {% for destination in featured_destinations %}
+      <div class="col-md-4 ftco-animate">
+        <div class="project-wrap">
+          <a href="{% url 'destination_detail' destination.slug %}" class="img" style="background-image: url('{{ destination.image.url }}');">
+            <span class="price">₹{{ destination.price_per_person }}/person</span>
+            {% if destination.discount_percentage %}
+            <span class="discount">-{{ destination.discount_percentage }}%</span>
+            {% endif %}
+          </a>
+          <div class="text p-4">
+            <span class="days">{{ destination.duration }} Days Tour</span>
+            <h3><a href="{% url 'destination_detail' destination.slug %}">{{ destination.name }}</a></h3>
+            <p class="location"><span class="fa fa-map-marker"></span> {{ destination.location }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // JavaScript for handling form interactions
+  $(document).ready(function() {
+    // Initialize date pickers
+    $('.checkin_date').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+      todayHighlight: true
+    });
+    
+    $('.checkout_date').datepicker({
+      format: 'yyyy-mm-dd',
+      autoclose: true,
+      todayHighlight: true
+    });
+    
+    // Form validation
+    $('form').submit(function(e) {
+      var checkin = $('input[name="checkin"]').val();
+      var checkout = $('input[name="checkout"]').val();
+      
+      if (checkin && checkout) {
+        var checkinDate = new Date(checkin);
+        var checkoutDate = new Date(checkout);
+        
+        if (checkoutDate <= checkinDate) {
+          e.preventDefault();
+          alert('Check-out date must be after check-in date.');
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

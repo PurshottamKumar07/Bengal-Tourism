@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Caravan Rentals | West Bengal Tourism
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .caravan-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+    .caravan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .caravan-type-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #f96d00;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .price-tag {
+      background: #f96d00;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .amenities-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .amenities-list li {
+      display: inline-block;
+      background: #f8f9fa;
+      padding: 4px 8px;
+      margin: 2px;
+      border-radius: 12px;
+      font-size: 11px;
+      color: #666;
+    }
+    
+    .search-filters {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .filter-section {
+      margin-bottom: 20px;
+    }
+    
+    .filter-section h6 {
+      color: #333;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+  </style>
+{% endblock %}
+
+{% block hero_section %}
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs">
+            <span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span>
+            <span class="mr-2"><a href="{% url 'hotel' %}">Travel Agency <i class="fa fa-chevron-right"></i></a></span>
+            <span>Caravans</span>
+          </p>
+          <h1 class="mb-0 bread">Caravan Rentals</h1>
+          <p class="text-white">Explore West Bengal in comfort with our premium caravans</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <!-- Search and Filters Section -->
+  <section class="ftco-section ftco-no-pt">
+    <div class="container">
+      <div class="search-filters">
+        <h3 class="text-center mb-4">Find Your Perfect Caravan</h3>
+        <form method="get" class="row">
+          <div class="col-md-3">
+            <div class="filter-section">
+              <h6>Caravan Type</h6>
+              {{ form.caravan_type }}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="filter-section">
+              <h6>Capacity</h6>
+              {{ form.capacity }}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="filter-section">
+              <h6>Price Range</h6>
+              {{ form.price_range }}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="filter-section">
+              <h6>Travel Dates</h6>
+              {{ form.pickup_date }}
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="filter-section">
+              <h6>Amenities</h6>
+              <div class="row">
+                <div class="col-md-3">
+                  <label class="checkbox-inline">{{ form.has_ac }} {{ form.has_ac.label }}</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="checkbox-inline">{{ form.has_kitchen }} {{ form.has_kitchen.label }}</label>
+                </div>
+                <div class="col-md-3">
+                  <label class="checkbox-inline">{{ form.has_bathroom }} {{ form.has_bathroom.label }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 text-center">
+            <button type="submit" class="btn btn-primary" style="background: #f96d00; border-color: #f96d00;"><i class="fa fa-search"></i> Search Caravans</button>
+            <a href="{% url 'caravan_list' %}" class="btn btn-outline-secondary ml-2">Clear Filters</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Caravans Section -->
+  {% if featured_caravans %}
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center pb-4">
+          <div class="col-md-12 heading-section text-center ftco-animate">
+            <span class="subheading">Featured</span>
+            <h2 class="mb-4">Featured Caravans</h2>
+          </div>
+        </div>
+        <div class="row">
+          {% for caravan in featured_caravans %}
+            <div class="col-md-4 mb-4">
+              <div class="card caravan-card h-100">
+                <div class="position-relative">
+                  <img src="{% if caravan.featured_image %}
+                      {{ caravan.featured_image.url }}
+                    {% else %}
+                      {% static 'images/services-1.jpg' %}
+                    {% endif %}"
+                    class="card-img-top"
+                    alt="{{ caravan.name }}"
+                    style="height: 200px; object-fit: cover;" />
+                  <span class="caravan-type-badge">{{ caravan.get_caravan_type_display }}</span>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">{{ caravan.name }}</h5>
+                  <p class="card-text">{{ caravan.short_description }}</p>
+
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <small class="text-muted"><i class="fa fa-users"></i> {{ caravan.capacity }} People</small>
+                    </div>
+                    <div class="col-6">
+                      <small class="text-muted"><i class="fa fa-bed"></i> {{ caravan.beds }} Beds</small>
+                    </div>
+                  </div>
+
+                  <ul class="amenities-list">
+                    {% if caravan.has_ac %}
+                      <li>AC</li>
+                    {% endif %}
+                    {% if caravan.has_kitchen %}
+                      <li>Kitchen</li>
+                    {% endif %}
+                    {% if caravan.has_bathroom %}
+                      <li>Bathroom</li>
+                    {% endif %}
+                    {% if caravan.has_generator %}
+                      <li>Generator</li>
+                    {% endif %}
+                  </ul>
+
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="price-tag">₹{{ caravan.daily_rate|floatformat:0 }}/day</span>
+                    <a href="{% url 'caravan_detail' caravan.slug %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <!-- All Caravans Section -->
+  <section class="ftco-section">
+    <div class="container">
+      <div class="row justify-content-center pb-4">
+        <div class="col-md-12 heading-section text-center ftco-animate">
+          <h2 class="mb-4">Available Caravans</h2>
+        </div>
+      </div>
+
+      {% if caravans %}
+        <div class="row">
+          {% for caravan in caravans %}
+            <div class="col-md-4 mb-4">
+              <div class="card caravan-card h-100">
+                <div class="position-relative">
+                  <img src="{% if caravan.featured_image %}
+                      {{ caravan.featured_image.url }}
+                    {% else %}
+                      {% static 'images/services-1.jpg' %}
+                    {% endif %}"
+                    class="card-img-top"
+                    alt="{{ caravan.name }}"
+                    style="height: 200px; object-fit: cover;" />
+                  <span class="caravan-type-badge">{{ caravan.get_caravan_type_display }}</span>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">{{ caravan.name }}</h5>
+                  <p class="card-text">{{ caravan.short_description }}</p>
+
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <small class="text-muted"><i class="fa fa-users"></i> {{ caravan.capacity }} People</small>
+                    </div>
+                    <div class="col-6">
+                      <small class="text-muted"><i class="fa fa-bed"></i> {{ caravan.beds }} Beds</small>
+                    </div>
+                  </div>
+
+                  <ul class="amenities-list">
+                    {% if caravan.has_ac %}
+                      <li>AC</li>
+                    {% endif %}
+                    {% if caravan.has_kitchen %}
+                      <li>Kitchen</li>
+                    {% endif %}
+                    {% if caravan.has_bathroom %}
+                      <li>Bathroom</li>
+                    {% endif %}
+                    {% if caravan.has_generator %}
+                      <li>Generator</li>
+                    {% endif %}
+                  </ul>
+
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="price-tag">₹{{ caravan.daily_rate|floatformat:0 }}/day</span>
+                    <a href="{% url 'caravan_detail' caravan.slug %}" class="btn btn-outline-primary btn-sm">View Details</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if caravans.has_other_pages %}
+          <div class="row mt-5">
+            <div class="col text-center">
+              <div class="block-27">
+                <ul>
+                  {% if caravans.has_previous %}
+                    <li>
+                      <a href="?page={{ caravans.previous_page_number }}">&lt;</a>
+                    </li>
+                  {% endif %}
+
+                  {% for num in caravans.paginator.page_range %}
+                    {% if caravans.number == num %}
+                      <li class="active">
+                        <span>{{ num }}</span>
+                      </li>
+                    {% elif num > caravans.number|add:'-3' and num < caravans.number|add:'3' %}
+                      <li>
+                        <a href="?page={{ num }}">{{ num }}</a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if caravans.has_next %}
+                    <li>
+                      <a href="?page={{ caravans.next_page_number }}">&gt;</a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="text-center">
+          <p class="lead">No caravans found matching your criteria.</p>
+          <a href="{% url 'caravan_list' %}" class="btn btn-primary">View All Caravans</a>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="ftco-section bg-light">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-md-8">
+          <h2>Ready for Your Adventure?</h2>
+          <p class="mb-4">Book your perfect caravan and explore the beautiful destinations of West Bengal in comfort and style.</p>
+          <a href="{% url 'contact' %}" class="btn btn-primary btn-lg" style="background: #f96d00; border-color: #f96d00;">Contact Us for Booking</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,761 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}West Bengal Tourism - Discover Beautiful Destinations{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-wrap {
+        background-image: url('{% static "images/west_bengal/main.jpg" %}') !important;
+    }
+    .ftco-select-destination {
+        background-image: url('{% static "images/bg_3.jpg" %}') !important;
+    }
+    .testimony-section {
+        background-image: url('{% static "images/bg_1.jpg" %}') !important;
+    }
+    .ftco-intro .img {
+        background-image: url('{% static "images/bg_2.jpg" %}') !important;
+    }
+    footer {
+        background-image: url('{% static "images/bg_3.jpg" %}') !important;
+    }
+    
+    /* Dynamic rating stars color */
+    .testimony-wrap .star {
+        color: #ffc107;
+    }
+    
+    /* Price highlighting for special offers */
+    .special-offer .price {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .search-property-1 .form-group {
+            padding: 15px !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-wrap js-fullheight">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-center" data-scrollax-parent="true">
+            <div class="col-md-7 ftco-animate">
+                <span class="subheading">Welcome to West Bengal</span>
+                <h1 class="mb-4">Discover the Land Of Festivals with us</h1>
+                <p class="caps">Travel to any corner of West Bengal, without going around in circles</p>
+                
+                {# Display seasonal greeting based on current month #}
+                {% now "n" as current_month %}
+                <p class="seasonal-greeting">
+                    {% if current_month == '12' or current_month == '1' or current_month == '2' %}
+                         Perfect time for winter getaways in the mountains!
+                    {% elif current_month == '3' or current_month == '4' or current_month == '5' %}
+                         Spring season - ideal for cultural festivals and sightseeing!
+                    {% elif current_month == '6' or current_month == '7' or current_month == '8' %}
+                         Monsoon special - lush green landscapes await!
+                    {% else %}
+                         Autumn offers pleasant weather for all destinations!
+                    {% endif %}
+                </p>
+                
+                <p><a href="{% url 'destination_list' %}" class="btn btn-primary py-3 px-4">Explore Destinations</a></p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-no-pb ftco-no-pt">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ftco-search d-flex justify-content-center">
+                    <div class="row">
+                        <div class="col-md-12 nav-link-wrap">
+                            <div class="nav nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                <a class="nav-link active mr-md-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Search Tour</a>
+                                <a class="nav-link" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Hotel</a>
+                            </div>
+                        </div>
+                        <div class="col-md-12 tab-wrap">
+                            <div class="tab-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-nextgen-tab">
+                                    <form action="{% url 'destination_list' %}" method="get" class="search-property-1" id="tour-search-form">
+                                        <div class="row no-gutters">
+                                            <div class="col-md d-flex">
+                                                <div class="form-group p-4 border-0">
+                                                    <label for="destination">Destination</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-search"></span></div>
+                                                        <input type="text" name="destination" class="form-control" placeholder="Search place" value="{{ request.GET.destination }}" id="destination-input" list="destination-suggestions">
+                                                        <datalist id="destination-suggestions">
+                                                            {% for dest in all_destinations %}
+                                                            <option value="{{ dest.name }}">
+                                                            {% endfor %}
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="checkin">Check-in date</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-calendar"></span></div>
+                                                        <input type="text" name="checkin" class="form-control checkin_date" placeholder="Check In Date" value="{{ request.GET.checkin }}" min="{% now 'Y-m-d' %}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="checkout">Check-out date</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-calendar"></span></div>
+                                                        <input type="text" name="checkout" class="form-control checkout_date" placeholder="Check Out Date" value="{{ request.GET.checkout }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="price_limit">Price Limit</label>
+                                                    <div class="form-field">
+                                                        <div class="select-wrap">
+                                                            <div class="icon"><span class="fa fa-chevron-down"></span></div>
+                                                            <select name="price_limit" id="price_limit" class="form-control">
+                                                                <option value="">Select Price</option>
+                                                                <option value="1000" {% if request.GET.price_limit == "1000" %}selected{% endif %}>₹1,000</option>
+                                                                <option value="5000" {% if request.GET.price_limit == "5000" %}selected{% endif %}>₹5,000</option>
+                                                                <option value="10000" {% if request.GET.price_limit == "10000" %}selected{% endif %}>₹10,000</option>
+                                                                <option value="20000" {% if request.GET.price_limit == "20000" %}selected{% endif %}>₹20,000</option>
+                                                                <option value="50000" {% if request.GET.price_limit == "50000" %}selected{% endif %}>₹50,000</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md d-flex">
+                                                <div class="form-group d-flex w-100 border-0">
+                                                    <div class="form-field w-100 align-items-center d-flex">
+                                                        <input type="submit" value="Search" class="align-self-stretch form-control btn btn-primary">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-performance-tab">
+                                    <form action="#" class="search-property-1" id="hotel-search-form">
+                                        <div class="row no-gutters">
+                                            <div class="col-lg d-flex">
+                                                <div class="form-group p-4 border-0">
+                                                    <label for="hotel-destination">Destination</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-search"></span></div>
+                                                        <input type="text" id="hotel-destination" class="form-control" placeholder="Search place" list="hotel-suggestions">
+                                                        <datalist id="hotel-suggestions">
+                                                            {% for city in popular_cities %}
+                                                            <option value="{{ city }}">
+                                                            {% endfor %}
+                                                        </datalist>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="hotel-checkin">Check-in date</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-calendar"></span></div>
+                                                        <input type="text" id="hotel-checkin" class="form-control checkin_date" placeholder="Check In Date" min="{% now 'Y-m-d' %}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="hotel-checkout">Check-out date</label>
+                                                    <div class="form-field">
+                                                        <div class="icon"><span class="fa fa-calendar"></span></div>
+                                                        <input type="text" id="hotel-checkout" class="form-control checkout_date" placeholder="Check Out Date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg d-flex">
+                                                <div class="form-group p-4">
+                                                    <label for="guests">Guests</label>
+                                                    <div class="form-field">
+                                                        <div class="select-wrap">
+                                                            <div class="icon"><span class="fa fa-user"></span></div>
+                                                            <select id="guests" class="form-control">
+                                                                <option value="1">1 Guest</option>
+                                                                <option value="2" selected>2 Guests</option>
+                                                                <option value="3">3 Guests</option>
+                                                                <option value="4">4 Guests</option>
+                                                                <option value="5">5+ Guests</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg d-flex">
+                                                <div class="form-group d-flex w-100 border-0">
+                                                    <div class="form-field w-100 align-items-center d-flex">
+                                                        <input type="submit" value="Search" class="align-self-stretch form-control btn btn-primary p-0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section services-section">
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-md-6 order-md-last heading-section pl-md-5 ftco-animate d-flex align-items-center">
+                <div class="w-100">
+                    <span class="subheading">Welcome to West Bengal Tourism</span>
+                    <h2 class="mb-4">It's time to start your adventure</h2>
+                    <p>Discover the rich cultural heritage, diverse landscapes, and warm hospitality of West Bengal. From the Himalayan mountains in the north to the Bay of Bengal in the south, our state offers unforgettable experiences for every traveler.</p>
+                    
+                    {# Display statistics if available #}
+                    {% if stats %}
+                    <div class="stats-container mt-4 mb-4">
+                        <div class="row">
+                            <div class="col-4 text-center">
+                                <div class="stat-number">{{ stats.destinations_count }}+</div>
+                                <div class="stat-label">Destinations</div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="stat-number">{{ stats.tours_count }}+</div>
+                                <div class="stat-label">Tours</div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="stat-number">{{ stats.visitors_count }}+</div>
+                                <div class="stat-label">Happy Visitors</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <p><a href="{% url 'destination_list' %}" class="btn btn-primary py-3 px-4">Search Destination</a></p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    {% for service in services %}
+                    <div class="col-md-12 col-lg-6 d-flex align-self-stretch ftco-animate">
+                        <div class="services services-1 color-{{ forloop.counter }} d-block img" style="background-image: url('{% static service.image %}');">
+                            <div class="icon d-flex align-items-center justify-content-center"><span class="{{ service.icon }}"></span></div>
+                            <div class="media-body">
+                                <h3 class="heading mb-3">{{ service.title }}</h3>
+                                <p>{{ service.description }}</p>
+                            </div>
+                        </div>      
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section img ftco-select-destination">
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">West Bengal Tourism</span>
+                <h2 class="mb-4">Popular Destination Types</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container container-2">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="carousel-destination owl-carousel ftco-animate">
+                    {% for type in destination_types %}
+                    <div class="item">
+                        <div class="project-destination">
+                            <a href="{% url 'destinations_by_type' type.0 %}" class="img" style="background-image: url('{% static 'images/place-' %}{{ forloop.counter }}.jpg');">
+                                <div class="text">
+                                    <h3>{{ type.1 }}</h3>
+                                    <span>{{ type.2 }} Tours</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Featured Destinations</span>
+                <h2 class="mb-4">Popular Tour Destinations</h2>
+                
+                {# Show special offer badge if there are discounted destinations #}
+                {% if discounted_destinations.exists %}
+                <div class="alert alert-info mt-3" role="alert">
+                    <strong>Special Offer!</strong> {{ discounted_destinations.count }} destinations are currently on discount. Book now!
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            {% for destination in featured_destinations|slice:":6" %}
+            <div class="col-md-4 ftco-animate {% if destination.has_discount %}special-offer{% endif %}">
+                <div class="project-wrap">
+                    <a href="{{ destination.get_absolute_url }}" class="img" style="background-image: url('{{ destination.image.url }}');">
+                        <span class="price">
+                            {% if destination.has_discount %}
+                                <span class="original-price">₹{{ destination.original_price }}</span>
+                                ₹{{ destination.price_per_person }}
+                            {% else %}
+                                ₹{{ destination.price_per_person }}
+                            {% endif %}
+                            /person
+                        </span>
+                        {% if destination.has_discount %}
+                        <span class="discount-badge">-{{ destination.discount_percentage }}%</span>
+                        {% endif %}
+                    </a>
+                    <div class="text p-4">
+                        <span class="days">{{ destination.duration }} Days Tour</span>
+                        <h3><a href="{{ destination.get_absolute_url }}">{{ destination.name }}</a></h3>
+                        <p class="location"><span class="fa fa-map-marker"></span> {{ destination.location }}</p>
+                        <ul>
+                            <li><span class="flaticon-shower"></span>{{ destination.shower_count }}</li>
+                            <li><span class="flaticon-king-size"></span>{{ destination.bed_count }}</li>
+                            <li>
+                                <span class="
+                                    {% if destination.near_mountain %}flaticon-mountains
+                                    {% elif destination.near_beach %}flaticon-sun-umbrella
+                                    {% else %}flaticon-city{% endif %}">
+                                </span>
+                                {% if destination.near_mountain %}Near Mountain
+                                {% elif destination.near_beach %}Near Beach
+                                {% else %}City Center{% endif %}
+                            </li>
+                        </ul>
+                        
+                        {# Show rating if available #}
+                        {% if destination.average_rating %}
+                        <div class="destination-rating mt-2">
+                            <div class="stars">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= destination.average_rating %}
+                                        <span class="fa fa-star checked"></span>
+                                    {% else %}
+                                        <span class="fa fa-star"></span>
+                                    {% endif %}
+                                {% endfor %}
+                                <span class="rating-count">({{ destination.review_count }})</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-warning">
+                    <p>No featured destinations available at the moment. Please check back later.</p>
+                    <a href="{% url 'destination_list' %}" class="btn btn-primary mt-2">View All Destinations</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <a href="{% url 'destination_list' %}" class="btn btn-primary">View All Destinations</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Only show video section if there are videos available #}
+{% if show_video_section %}
+<section class="ftco-section ftco-about img" style="background-image: url('{% static 'images/bg_4.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container py-md-5">
+        <div class="row py-md-5">
+            <div class="col-md d-flex align-items-center justify-content-center">
+                <a href="https://vimeo.com/45830194" class="icon-video popup-vimeo d-flex align-items-center justify-content-center mb-4">
+                    <span class="fa fa-play"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="ftco-section ftco-about ftco-no-pt img">
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-md-12 about-intro">
+                <div class="row">
+                    <div class="col-md-6 d-flex align-items-stretch">
+                        <div class="img d-flex w-100 align-items-center justify-content-center" style="background-image:url('{% static 'images/about-1.jpg' %}');">
+                        </div>
+                    </div>
+                    <div class="col-md-6 pl-md-5 py-5">
+                        <div class="row justify-content-start pb-3">
+                            <div class="col-md-12 heading-section ftco-animate">
+                                <span class="subheading">About Us</span>
+                                <h2 class="mb-4">Make Your Tour Memorable and Safe With Us</h2>
+                                <p>West Bengal Tourism is committed to providing exceptional travel experiences that showcase the rich cultural heritage, natural beauty, and diverse attractions of our beautiful state. With years of experience and local expertise, we ensure that your journey is not only memorable but also safe and comfortable.</p>
+                                
+                                {# Display trust indicators #}
+                                <div class="trust-indicators mt-4">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="fa fa-shield fa-2x text-primary mr-3"></span>
+                                                <div>
+                                                    <h5 class="mb-0">Safe & Secure</h5>
+                                                    <small>Verified accommodations</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="fa fa-headset fa-2x text-primary mr-3"></span>
+                                                <div>
+                                                    <h5 class="mb-0">24/7 Support</h5>
+                                                    <small>Always available to help</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p><a href="{% url 'destination_list' %}" class="btn btn-primary">Explore Destinations</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Testimonials section - only show if there are testimonials #}
+{% if testimonials %}
+<section class="ftco-section testimony-section bg-bottom">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+                <span class="subheading">Testimonial</span>
+                <h2 class="mb-4">What Our Visitors Say</h2>
+            </div>
+        </div>
+        <div class="row ftco-animate">
+            <div class="col-md-12">
+                <div class="carousel-testimony owl-carousel">
+                    {% for testimonial in testimonials %}
+                    <div class="item">
+                        <div class="testimony-wrap py-4">
+                            <div class="text">
+                                <p class="star">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= testimonial.rating %}
+                                            <span class="fa fa-star"></span>
+                                        {% else %}
+                                            <span class="fa fa-star-o"></span>
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                                <p class="mb-4">{{ testimonial.feedback }}</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="user-img" style="background-image: url('{% if testimonial.image %}{{ testimonial.image.url }}{% else %}{% static 'images/person_1.jpg' %}{% endif %}')"></div>
+                                    <div class="pl-3">
+                                        <p class="name">{{ testimonial.name }}</p>
+                                        <span class="position">{{ testimonial.position }}</span>
+                                        {% if testimonial.destination %}
+                                        <span class="destination">Visited: {{ testimonial.destination.name }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Travel Blog</span>
+                <h2 class="mb-4">Recent Posts & Travel Tips</h2>
+            </div>
+        </div>
+        <div class="row d-flex">
+            {% for post in blog_posts|slice:":3" %}
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                    <a href="{{ post.get_absolute_url }}" class="block-20" style="background-image: url('{{ post.featured_image.url }}');">
+                        {% if post.is_new %}
+                        <span class="badge-new">New</span>
+                        {% endif %}
+                    </a>
+                    <div class="text">
+                        <div class="d-flex align-items-center mb-4 topp">
+                            <div class="one">
+                                <span class="day">{{ post.publish_date|date:"d" }}</span>
+                            </div>
+                            <div class="two">
+                                <span class="yr">{{ post.publish_date|date:"Y" }}</span>
+                                <span class="mos">{{ post.publish_date|date:"F" }}</span>
+                            </div>
+                        </div>
+                        <h3 class="heading"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                        <p class="excerpt">{{ post.excerpt|truncatewords:20 }}</p>
+                        <p><a href="{{ post.get_absolute_url }}" class="btn btn-primary">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            {# Fallback content if no blog posts #}
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                    <a href="#" class="block-20" style="background-image: url('{% static 'images/west_bengal/sunderban.jpeg' %}');">
+                    </a>
+                    <div class="text">
+                        <div class="d-flex align-items-center mb-4 topp">
+                            <div class="one">
+                                <span class="day">15</span>
+                            </div>
+                            <div class="two">
+                                <span class="yr">2023</span>
+                                <span class="mos">October</span>
+                            </div>
+                        </div>
+                        <h3 class="heading"><a href="#">Exploring the Sundarbans Mangrove Forests</a></h3>
+                        <p><a href="#" class="btn btn-primary">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                    <a href="#" class="block-20" style="background-image: url('{% static 'images/west_bengal/dazeling.jpg' %}');">
+                    </a>
+                    <div class="text">
+                        <div class="d-flex align-items-center mb-4 topp">
+                            <div class="one">
+                                <span class="day">22</span>
+                            </div>
+                            <div class="two">
+                                <span class="yr">2023</span>
+                                <span class="mos">September</span>
+                            </div>
+                        </div>
+                        <h3 class="heading"><a href="#">Darjeeling: The Queen of Hills</a></h3>
+                        <p><a href="#" class="btn btn-primary">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry">
+                    <a href="#" class="block-20" style="background-image: url('{% static 'images/west_bengal/durga.jpeg' %}');">
+                    </a>
+                    <div class="text">
+                        <div class="d-flex align-items-center mb-4 topp">
+                            <div class="one">
+                                <span class="day">05</span>
+                            </div>
+                            <div class="two">
+                                <span class="yr">2023</span>
+                                <span class="mos">August</span>
+                            </div>
+                        </div>
+                        <h3 class="heading"><a href="#">Cultural Festivals of West Bengal</a></h3>
+                        <p><a href="#" class="btn btn-primary">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="ftco-intro ftco-section ftco-no-pt">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <div class="img">
+                    <div class="overlay"></div>
+                    <h2>We Are West Bengal Tourism</h2>
+                    <p>Your trusted partner for discovering the incredible diversity and beauty of West Bengal</p>
+                    
+                    {# Newsletter subscription form #}
+                    <div class="newsletter-form mt-4">
+                        <h5 class="text-white">Subscribe to our newsletter</h5>
+                        <form class="form-inline justify-content-center" id="newsletter-form">
+                            <div class="form-group mx-sm-3 mb-2">
+                                <input type="email" class="form-control" placeholder="Your email address" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2">Subscribe</button>
+                        </form>
+                    </div>
+                    
+                    <p class="mb-0 mt-3"><a href="{% url 'contact' %}" class="btn btn-primary px-4 py-3">Contact Us</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Initialize date pickers
+        $('.checkin_date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+        
+        $('.checkout_date').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+        
+        // Set minimum checkout date based on checkin date
+        $('.checkin_date').on('change', function() {
+            var checkinDate = $(this).val();
+            if (checkinDate) {
+                $('.checkout_date').datepicker('setStartDate', checkinDate);
+            }
+        });
+        
+        // Initialize destination carousel
+        $('.carousel-destination').owlCarousel({
+            center: false,
+            loop: true,
+            items: 4,
+            margin: 20,
+            stagePadding: 0,
+            nav: false,
+            navText: ['<span class="fa fa-chevron-left">', '<span class="fa fa-chevron-right">'],
+            responsive: {
+                0: { items: 1 },
+                600: { items: 2 },
+                1000: { items: 4 }
+            }
+        });
+        
+        // Initialize testimonial carousel
+        $('.carousel-testimony').owlCarousel({
+            center: true,
+            loop: true,
+            items: 1,
+            margin: 30,
+            stagePadding: 0,
+            nav: false,
+            navText: ['<span class="fa fa-chevron-left">', '<span class="fa fa-chevron-right">'],
+            responsive: {
+                0: { items: 1 },
+                600: { items: 2 },
+                1000: { items: 3 }
+            }
+        });
+        
+        // Form validation
+        $('#tour-search-form, #hotel-search-form').on('submit', function(e) {
+            var checkin = $(this).find('.checkin_date').val();
+            var checkout = $(this).find('.checkout_date').val();
+            
+            if (checkin && checkout) {
+                var checkinDate = new Date(checkin);
+                var checkoutDate = new Date(checkout);
+                
+                if (checkoutDate <= checkinDate) {
+                    e.preventDefault();
+                    alert('Check-out date must be after check-in date.');
+                    return false;
+                }
+            }
+            return true;
+        });
+        
+        // Newsletter subscription
+        $('#newsletter-form').on('submit', function(e) {
+            e.preventDefault();
+            var email = $(this).find('input[type="email"]').val();
+            
+            // Simple email validation
+            if (!isValidEmail(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // Here you would typically send the data to your server
+            // For now, we'll just show a success message
+            alert('Thank you for subscribing to our newsletter!');
+            $(this).find('input[type="email"]').val('');
+        });
+        
+        function isValidEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Smooth scrolling for anchor links
+        $('a[href^="#"]').on('click', function(event) {
+            var target = $(this.getAttribute('href'));
+            if (target.length) {
+                event.preventDefault();
+                $('html, body').stop().animate({
+                    scrollTop: target.offset().top - 70
+                }, 1000);
+            }
+        });
+        
+        // Lazy loading for images
+        if ('IntersectionObserver' in window) {
+            const lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        const lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove('lazy');
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+            
+            $('img.lazy').each(function() {
+                lazyImageObserver.observe(this);
+            });
+        }
+    });
+</script>
+{% endblock %}

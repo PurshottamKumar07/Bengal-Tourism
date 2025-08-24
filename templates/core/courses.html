@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Courses | West Bengal Tourism
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    /* Scoped to courses page only */
+    .courses-page .course-filter-btn {
+      border-color: #f96d00;
+      color: #f96d00;
+      border-radius: 20px;
+      padding: 8px 16px;
+      transition: all 0.2s ease-in-out;
+      background: transparent;
+    }
+    .courses-page .course-filter-btn:hover,
+    .courses-page .course-filter-btn.active {
+      background-color: #f96d00;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .courses-page .price-tag,
+    .courses-page .price-tag-large {
+      background: #f96d00;
+      color: #fff;
+    }
+    .courses-page .heading a:hover {
+      color: #f96d00;
+    }
+    .courses-page .btn-learn-more {
+      background: #f96d00;
+      border-color: #f96d00;
+    }
+    .courses-page .btn-learn-more:hover {
+      background: #d85a00;
+      border-color: #d85a00;
+    }
+  </style>
+{% endblock %}
+
+{% block hero_section %}
+  <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/west_bengal/kolkata1.jpg' %}');">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+        <div class="col-md-9 ftco-animate pb-5 text-center">
+          <p class="breadcrumbs">
+            <span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span> <span>Courses <i class="fa fa-chevron-right"></i></span>
+          </p>
+          <h1 class="mb-0 bread">Join Our Courses</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block content %}
+  <div class="courses-page">
+    <!-- Featured Courses Section -->
+    {% if featured_courses %}
+      <section class="ftco-section bg-light">
+        <div class="container">
+          <div class="row justify-content-center pb-4">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+              <span class="subheading">Featured</span>
+              <h2 class="mb-4">Featured Courses</h2>
+            </div>
+          </div>
+          <div class="row">
+            {% for course in featured_courses %}
+              <div class="col-md-4 d-flex ftco-animate">
+                <div class="blog-entry justify-content-end">
+                  <a href="{% url 'course_detail' course.slug %}"
+                    class="block-20"
+                    style="background-image: url('{% if course.featured_image %}
+                      {{ course.featured_image.url }}
+                    {% else %}
+                      {% static 'images/image_1.jpg' %}
+                    {% endif %}');">
+
+                  </a>
+                  <div class="text">
+                    <div class="d-flex align-items-center mb-4 topp">
+                      <div class="one">
+                        <span class="day">{{ course.duration_weeks }}</span>
+                      </div>
+                      <div class="two">
+                        <span class="yr">Weeks</span><span class="mos">{{ course.get_category_display }}</span>
+                      </div>
+                    </div>
+                    <h3 class="heading"><a href="{% url 'course_detail' course.slug %}">{{ course.name }}</a></h3>
+                    <p class="excerpt">{{ course.short_description|default:course.description|truncatewords:20 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="price-tag">₹{{ course.price|floatformat:0 }}</span>
+                      <a href="{% url 'course_detail' course.slug %}" class="btn btn-primary btn-learn-more">Learn More</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+    {% endif %}
+
+    <!-- All Courses Section -->
+    <section class="ftco-section">
+      <div class="container">
+        <!-- Category Filter -->
+        <div class="row justify-content-center mb-4">
+          <div class="col-md-8 text-center">
+            <div class="btn-group" role="group" aria-label="Course Categories">
+              <a href="{% url 'courses' %}" class="btn course-filter-btn {% if not current_category %}active{% endif %}">All Courses</a>
+              {% for category_code, category_name in categories %}
+                <a href="{% url 'courses' %}?category={{ category_code }}" class="btn course-filter-btn {% if current_category == category_code %}active{% endif %}">{{ category_name }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="row d-flex">
+          {% for course in courses %}
+            <div class="col-md-4 d-flex ftco-animate">
+              <div class="blog-entry justify-content-end">
+                <a href="{% url 'course_detail' course.slug %}"
+                  class="block-20"
+                  style="background-image: url('{% if course.featured_image %}
+                    {{ course.featured_image.url }}
+                  {% else %}
+                    {% static 'images/image_1.jpg' %}
+                  {% endif %}');">
+
+                </a>
+                <div class="text">
+                  <div class="d-flex align-items-center mb-4 topp">
+                    <div class="one">
+                      <span class="day">{{ course.duration_weeks }}</span>
+                    </div>
+                    <div class="two">
+                      <span class="yr">Weeks</span><span class="mos">{{ course.get_category_display }}</span>
+                    </div>
+                  </div>
+                  <h3 class="heading"><a href="{% url 'course_detail' course.slug %}">{{ course.name }}</a></h3>
+                  <p class="excerpt">{{ course.short_description|default:course.description|truncatewords:20 }}</p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="price-tag">₹{{ course.price|floatformat:0 }}</span>
+                    <a href="{% url 'course_detail' course.slug %}" class="btn btn-primary btn-learn-more">Learn More</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <div class="col-12 text-center">
+              <p>No courses available in this category.</p>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if courses.has_other_pages %}
+          <div class="row mt-5">
+            <div class="col text-center">
+              <div class="block-27">
+                <ul>
+                  {% if courses.has_previous %}
+                    <li>
+                      <a href="?page={{ courses.previous_page_number }}{% if current_category %}
+                          
+                          &category={{ current_category }}
+                        {% endif %}">
+                        &lt;
+                      </a>
+                    </li>
+                  {% endif %}
+
+                  {% for num in courses.paginator.page_range %}
+                    {% if courses.number == num %}
+                      <li class="active">
+                        <span>{{ num }}</span>
+                      </li>
+                    {% elif num > courses.number|add:'-3' and num < courses.number|add:'3' %}
+                      <li>
+                        <a href="?page={{ num }}{% if current_category %}
+                            
+                            &category={{ current_category }}
+                          {% endif %}">
+                          {{ num }}
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+
+                  {% if courses.has_next %}
+                    <li>
+                      <a href="?page={{ courses.next_page_number }}{% if current_category %}
+                          
+                          &category={{ current_category }}
+                        {% endif %}">
+                        &gt;
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="ftco-section bg-light">
+      <div class="container">
+        <div class="row justify-content-center text-center">
+          <div class="col-md-8">
+            <h2>Ready to Start Your Journey?</h2>
+            <p class="mb-4">Join our courses and gain valuable skills in tourism, culture, and hospitality.</p>
+            <a href="{% url 'contact' %}" class="btn btn-primary btn-lg" style="background:#F96D00;border-color:#F96D00;">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

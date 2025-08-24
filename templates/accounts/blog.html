@@ -1,0 +1,63 @@
+{% extends 'accounts/blog_base.html' %}
+{% load static %}
+
+{% block title %}Courses - Tourism{% endblock %}
+
+{% block content %}
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-center">
+      <div class="col-md-9 ftco-animate pb-5 text-center">
+       <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index' %}">Home <i class="fa fa-chevron-right"></i></a></span> <span>Courses <i class="fa fa-chevron-right"></i></span></p>
+       <h1 class="mb-0 bread">Available Courses</h1>
+     </div>
+   </div>
+ </div>
+</section>
+
+<section class="ftco-section">
+  <div class="container">
+    <div class="row d-flex">
+      {% for course in courses %}
+      <div class="col-md-4 d-flex ftco-animate">
+       <div class="blog-entry justify-content-end">
+        <div class="text">
+         <div class="d-flex align-items-center mb-4 topp">
+          <div class="one">
+           <span class="day">{{ course.scheduled_at|date:"d" }}</span>
+         </div>
+         <div class="two">
+           <span class="yr">{{ course.scheduled_at|date:"Y" }}</span>
+           <span class="mos">{{ course.scheduled_at|date:"F" }}</span>
+         </div>
+       </div>
+       <h3 class="heading">{{ course.title }}</h3>
+       <p>{{ course.description|truncatewords:20 }}</p>
+       <p><a href="{% url 'course_detail' course.id %}" class="btn btn-primary">Apply Now</a></p>
+     </div>
+   </div>
+ </div>
+ {% empty %}
+ <div class="col-12 text-center">
+   <h3>No courses available at the moment. Please check back later.</h3>
+ </div>
+ {% endfor %}
+</div>
+</section>
+
+<section class="ftco-intro ftco-section ftco-no-pt">
+ <div class="container">
+  <div class="row justify-content-center">
+   <div class="col-md-12 text-center">
+    <div class="img"  style="background-image: url({% static 'images/bg_2.jpg' %});">
+     <div class="overlay"></div>
+     <h2>Join Our Courses</h2>
+     <p>Learn about tourism and travel management with our expert-led courses</p>
+     <p class="mb-0"><a href="{% url 'contact' %}" class="btn btn-primary px-4 py-3">Contact Us</a></p>
+   </div>
+ </div>
+</div>
+</div>
+</section>
+{% endblock %}
